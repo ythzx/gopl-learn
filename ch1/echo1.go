@@ -1,8 +1,10 @@
+//实现echo
 package main
 
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -20,6 +22,6 @@ func main() {
 	// }
 	// fmt.Println(s1)
 
-	// fmt.Println(strings.Join(os.Args[1:], " ")) //使用strings Join可以拼接数据量大的字符串
-	fmt.Println(os.Args[1:])
+	fmt.Println(strings.Join(os.Args[1:], " ")) //使用strings Join可以拼接数据量大的字符串
+	// fmt.Println(os.Args[1:])
 }
