@@ -12,10 +12,11 @@ func main() {
 	input := bufio.NewScanner(os.Stdin)
 	for input.Scan() {
 		fmt.Printf("The input is: %s\n", input.Text())
-		counts[input.Text()]++
-		fmt.Printf("The counts is: %v\n", counts)
+		counts[input.Text()]++ // counts[line] = counts[line] + 1 counts[line] 初始值为0
+ 		fmt.Printf("The counts is: %v\n", counts)
 
 		fmt.Println("数量----内容")
+		//map 中元素的顺序是无序的
 		for key, value := range counts {
 			if value > 1 {
 				fmt.Printf("%d\t%s\n", value, key)
