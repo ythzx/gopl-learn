@@ -24,7 +24,7 @@ func main() {
 			fmt.Printf("file obj f is: %v\n", f)         //文件对象
 			fmt.Printf("arg is: %v\n", arg)              //读取的文件的名字
 			fmt.Printf("os.arg[0] is: %v\n", os.Args[0]) // 程序自己的名字
-			filename = append(filename, arg)
+			filename = append(filename, arg)             // 切片再添加后需要重新赋值
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "dup2: %v\n", err) //Fprintf 打印文件的错误
 				continue
