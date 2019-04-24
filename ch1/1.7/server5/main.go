@@ -23,6 +23,10 @@ const (
 
 func main() {
 	http.HandleFunc("/test", handler)
+	// 下面是通过匿名函数的方式
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	lissajous(w)
+	// })
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
@@ -30,30 +34,32 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		log.Print(err)
 	}
+	// fmt.Fprintf(w, "form is %v\n", r.Form) // 需要注释 会导致生成文件
 
 	if r.Form["cycle"] != nil {
-		// cycle := 5
-		// nweCycle, err := strconv.Atoi(r.Form["cycle"][0])
-		// if err != nil {
-		// 	fmt.Println("convert err")
-		// }
-		// cycle = nweCycle
-		lissajous(w, r.Form["cycle"][0])
-	}
+		cycle, err := strconv.Atoi(r.Form["cycle"][0])
+		if err != nil {
+			fmt.Println("convert err")
+		}
+		lissajous(w, float64(cycle))
 
+	} else {
+		lissajous(w, float64(0))
+	}
 }
 
-func lissajous(out io.Writer, cycle_num string) {
+func lissajous(out io.Writer, newCycle float64) {
+	// number of complete x oscillator revolutions x轴谐波数量
 	const (
+		cycle   = 5
 		res     = 0.001 //angular resolutions  角分辨率
-		size    = 1000  // image canvas 图像画布打小
+		size    = 100   // image canvas 图像画布打小
 		nframes = 100   // nubmer of animations frames 动画帧
 		delay   = 8
 	)
 
-	nweCycle, err := strconv.Atoi(cycle_num)
-	if err != nil {
-		fmt.Println("convert err")
+	if newCycle == float64(0) {
+		newCycle = cycle
 	}
 
 	freq := rand.Float64() * 3.0        // y轴频率
@@ -62,7 +68,7 @@ func lissajous(out io.Writer, cycle_num string) {
 	for i := 0; i < nframes; i++ {
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
-		for t := 0.00; t < float64(nweCycle)*2*math.Pi; t += res {
+		for t := 0.00; t < newCycle*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
 			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), blackIndex)
